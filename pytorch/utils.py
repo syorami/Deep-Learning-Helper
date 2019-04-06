@@ -1,3 +1,7 @@
+import torch
+
+from torch import nn
+
 class AverageMeter(object):
     """Computes and stores the average and current value"""
     def __init__(self):
@@ -14,3 +18,10 @@ class AverageMeter(object):
         self.sum += val * n
         self.count += n
         self.avg = self.sum / self.count
+
+
+def get_optim_lr(optimizer):
+    for param_group in optimizer.param_groups:
+        lr = param_group['lr']
+    return lr
+
