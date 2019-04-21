@@ -25,3 +25,8 @@ def get_optim_lr(optimizer):
         lr = param_group['lr']
     return lr
 
+def get_optim_gamma(optimizer):
+    for param_group in optimizer.param_groups:
+        lr = param_group['gamma']
+    return lr
+
