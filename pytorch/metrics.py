@@ -19,6 +19,22 @@ def accuracy(output, target, topk=(1,)):
         res.append(correct_k.mul_(100.0 / batch_size))
     return res
 
+def F_score(logit, label, threshold=0.5, beta=2):
+    prob = torch.sigmoid(logit)
+    prob = prob > threshold
+    label = label > threshold
+
+    TP = (prob & label).sum(1).float()
+    TN = ((~prob) & (~label)).sum(1).float()
+    FP = (prob & (~label)).sum(1).float()
+    FN = ((~prob) & label).sum(1).float()
+
+    precision = TP / (TP + FP + 1e-12)
+    recall = TP / (TP + FN + 1e-12)
+    F2 = (1 + beta**2) * precision * recall / (beta**2 * precision + recall + 1e-12)
+    return F2.mean(0)
+
+
 class FocalLoss(nn.Module):
     """
     This is a implementation of Focal Loss with smooth label cross entropy supported which is proposed in
